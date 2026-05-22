@@ -118,10 +118,10 @@ def main():
             "Syntax: task-cli.py change_password [username] [password]",
         )
 
-    if str(sys.argv[1]).lower() == "change_password" and len(sys.argv) == 3:
+    if str(sys.argv[1]).lower() == "change_password" and len(sys.argv) == 4:
         change_password(str(sys.argv[2]), str(sys.argv[3]))
 
-    if str(sys.argv[1]).lower() == "new_user" and len(sys.argv) == 3:
+    if str(sys.argv[1]).lower() == "new_user" and len(sys.argv) == 4:
         new_user(str(sys.argv[2]), str(sys.argv[3]))
 
 
