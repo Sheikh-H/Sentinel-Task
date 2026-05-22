@@ -141,7 +141,7 @@ def add_task(username, password, task_title):
 
 def delete_task(username, password, task_id):
     global ALL_TASKS
-
+    # implement the search function via string also
     current_user = user_login(username, password)
     if current_user:
         for i, task in enumerate(ALL_TASKS):
@@ -183,7 +183,7 @@ def update_task(username, password, task_search, new_title):
                     task["user_id"]
                 ) == str(current_user["id"]):
                     counter += 1
-            
+
             if counter == 1:
                 for task in ALL_TASKS:
                     if task["title"].lower() == task_search.lower() and str(
@@ -199,7 +199,9 @@ def update_task(username, password, task_search, new_title):
                 else:
                     error("No task found with that title")
             else:
-                error("You have more than one task with the same title, please use task id instead!")
+                error(
+                    "You have more than one task with the same title, please use task id instead!"
+                )
 
 
 def main():
