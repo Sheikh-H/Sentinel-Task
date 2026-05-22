@@ -140,9 +140,10 @@ def add_task(username, password, task_title):
 
 def delete_task(username, password, task_id):
     global ALL_TASKS
-    global ALL_USERS
 
     current_user = user_login(username, password)
+
+    print(current_user)
 
     for i, task in enumerate(ALL_TASKS):
         if str(task["user_id"]) == str(current_user["id"]):
@@ -150,8 +151,8 @@ def delete_task(username, password, task_id):
                 del ALL_TASKS[i]
                 save_data(ALL_TASKS, TASKS_FILE)
                 error("Task deleted successfully!")
-            else:
-                error("No task with this ID, try again!")
+    else:
+        error("No task with this ID, try again!")
 
 
 def main():
@@ -196,9 +197,9 @@ def main():
         error(
             "Please enter in the following format:",
             "task-cli.py [username] [password] delete_task [task id]",
-        )
-    if len(sys.argv) < 5 and str(sys.argv[3]).lower() == "delete_task":
-        delete_task(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]))
+        )  #      0           1          2            3         4
+    if len(sys.argv) == 5 and str(sys.argv[3]).lower() == "delete_task":
+        delete_task(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[4]))
 
 
 main()
