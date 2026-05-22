@@ -297,5 +297,16 @@ def main():
             str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[4]), str(sys.argv[5])
         )
 
+        # list Tasks:
+    if len(sys.argv) < 6 and str(sys.argv[3]).lower() == "update_task":
+        error(
+            "Please enter in the following format:",
+            "task-cli.py [username] [password] list [task type]",
+        )
+    if len(sys.argv) == 6 and str(sys.argv[3]).lower() == "list":
+        update_task(
+            str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[4]), str(sys.argv[5])
+        )
+
 
 main()
