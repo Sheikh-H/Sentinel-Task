@@ -65,7 +65,6 @@ def new_user(username, password):
         if user["username"] == username:
             error("Username Already Exists, try again!")
             break
-        exit()
 
     id = max((user["id"] for user in ALL_USERS), default=0) + 1
 
@@ -75,22 +74,32 @@ def new_user(username, password):
         "password": password,
     }
 
-    data = ALL_USERS.append(add_user)
-    save_data(data, ALL_USERS)
+    ALL_USERS.append(add_user)
+    
+    save_data(ALL_USERS, USERS_FILE)
+    
     error("New User Added!")
 
 
 def main():
+    #if the arg length is only 2:
     if len(sys.argv) == 2:
         error("Please enter a username and password!")
+    #if arg length is only 1:
     if len(sys.argv) <= 1:
         error(
             "Please use login details then task actions",
             "Syntax: task-cli.py [username] [password] [function] [task id] [parameter]",
         )
-
+    # if the first arg provided says 'new_user' use new_user function
     if str(sys.argv[1]) == "new_user":
         new_user(str(sys.argv[2]), str(sys.argv[3]))
+    #if the first arg entered is 'new_user' but no other arg provided after:
+    if str(sys.argv[1]) == "new_user" and len(sys.argv) < 2:
+        error("Please enter a username and password to create new user", "Syntax: task-cli new_user [username] [password]")
+    
+        
+
 
 
 main()
