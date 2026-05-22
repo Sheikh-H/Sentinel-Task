@@ -191,7 +191,7 @@ def update_task(username, password, task_search, new_title):
                     ) == str(current_user["id"]):
                         old = task["title"]
                         task["title"] = new_title
-                        task["update_at"] = now
+                        task["updated_at"] = now
                         save_data(ALL_TASKS, TASKS_FILE)
                         error(
                             f"Updating task for '{current_user['username']}' from '{old}' to '{new_title}'"
@@ -204,12 +204,41 @@ def update_task(username, password, task_search, new_title):
                 )
 
 
-def list_view(username, password, list_type = ""):
+def list_view(username, password, list_type=""):
     global ALL_TASKS
-    
+
     current_user = user_login(username, password)
-    
-    if list_type not in ['done', 'todo', 'to-do', 'pending', 'in progress', 'in-progress', "", ]
+    if current_user:
+        if list_type.lower() not in [
+            "done",
+            "todo",
+            "to-do",
+            "pending",
+            "in progress",
+            "in-progress",
+            "",
+            "all",
+            "completed",
+            "finished",
+        ]:
+            error(
+                "Please enter the type of tasks you would like to see, here is a list of all acceptable values:",
+                "['done', 'todo', 'to-do', 'pending', 'in progress', 'in-progress', '', 'all']",
+            )
+        if list_type.lower() in ["done", "completed", "finished"]:
+            for task in ALL_TASKS:
+                if (
+                    str(task["user_id"]) == str(current_user["id"])
+                    and task["status"].lower() == "completed"
+                ):
+                    print("-" * 50)
+                    print(f"Task ID: {task['id']}")
+                    print(f"Task Title: {task['title']}")
+                    print(f"Task Status: {task['status']}")
+                    print(f"Created at: {task['created_at']}")
+                    print(f"Updated at: {task['updated_at']}")
+            error("-" * 50)
+
 
 def main():
     if len(sys.argv) <= 2:
