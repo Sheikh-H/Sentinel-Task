@@ -82,42 +82,47 @@ def new_user(username, password):
 
 
 def change_password(username, password):
-    pass
+    global ALL_USERS
+    
+    if not ALL_USERS:
+        error("No Existing Users!", "Please create a new user first with 'new_user' [username] [password]")
+        
+    for user in ALL_USERS:
+        if username == user['username']:
+            user['password'] = password
+            save_data(ALL_USERS, USERS_FILE)
+            error(f"Password updated for '{user['username']}'")
+        else:
+            error("Username not found, try again!")
 
 
 def main():
-    # if the arg length is only 2:
     if len(sys.argv) == 2:
         error("Please enter a username and password!")
 
-    # if arg length is only 1:
     if len(sys.argv) <= 1:
         error(
             "Please use login details then task actions",
             "Syntax: task-cli.py [username] [password] [function] [task id] [parameter]",
         )
-    # if the first arg provided says 'new_user' use new_user function
-    if str(sys.argv[1]).lower() == "new_user":
-        new_user(str(sys.argv[2]), str(sys.argv[3]))
 
-    # if the first arg entered is 'new_user' but no other arg provided after:
-    if str(sys.argv[1]).lower() == "new_user" and len(sys.argv) < 2:
+    if str(object=sys.argv[1]).lower() == "new_user" and len(sys.argv) <= 3:
         error(
             "Please enter a username and password to create new user",
             "Syntax: task-cli.py new_user [username] [password]",
         )
 
-    # If the first arg entered is change password:
-    if str(sys.argv[1]).lower() == "change_password":
-        change_password(str(sys.argv[2]), str(sys.argv[3]))
-
-    if str(sys.argv[1]).lower() == "change_password" and len(sys.argv) < 2:
+    if str(sys.argv[1]).lower() == "change_password" and len(sys.argv) <= 3:
         error(
             "Please enter an existing username and password to change password",
             "Syntax: task-cli.py change_password [username] [password]",
         )
-    
-    
+
+    if str(sys.argv[1]).lower() == "change_password" and len(sys.argv) == 3:
+        change_password(str(sys.argv[2]), str(sys.argv[3]))
+
+    if str(sys.argv[1]).lower() == "new_user" and len(sys.argv) == 3:
+        new_user(str(sys.argv[2]), str(sys.argv[3]))
 
 
 main()
