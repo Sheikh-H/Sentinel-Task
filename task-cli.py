@@ -60,7 +60,7 @@ def user_login(username, password):
 
 def new_user(username, password):
     global ALL_USERS
-    
+
     for user in ALL_USERS:
         if user["username"] == username:
             error("Username Already Exists, try again!")
@@ -75,31 +75,49 @@ def new_user(username, password):
     }
 
     ALL_USERS.append(add_user)
-    
+
     save_data(ALL_USERS, USERS_FILE)
-    
+
     error("New User Added!")
 
 
+def change_password(username, password):
+    pass
+
+
 def main():
-    #if the arg length is only 2:
+    # if the arg length is only 2:
     if len(sys.argv) == 2:
         error("Please enter a username and password!")
-    #if arg length is only 1:
+
+    # if arg length is only 1:
     if len(sys.argv) <= 1:
         error(
             "Please use login details then task actions",
             "Syntax: task-cli.py [username] [password] [function] [task id] [parameter]",
         )
     # if the first arg provided says 'new_user' use new_user function
-    if str(sys.argv[1]) == "new_user":
+    if str(sys.argv[1]).lower() == "new_user":
         new_user(str(sys.argv[2]), str(sys.argv[3]))
-    #if the first arg entered is 'new_user' but no other arg provided after:
-    if str(sys.argv[1]) == "new_user" and len(sys.argv) < 2:
-        error("Please enter a username and password to create new user", "Syntax: task-cli new_user [username] [password]")
-    
-        
 
+    # if the first arg entered is 'new_user' but no other arg provided after:
+    if str(sys.argv[1]).lower() == "new_user" and len(sys.argv) < 2:
+        error(
+            "Please enter a username and password to create new user",
+            "Syntax: task-cli.py new_user [username] [password]",
+        )
+
+    # If the first arg entered is change password:
+    if str(sys.argv[1]).lower() == "change_password":
+        change_password(str(sys.argv[2]), str(sys.argv[3]))
+
+    if str(sys.argv[1]).lower() == "change_password" and len(sys.argv) < 2:
+        error(
+            "Please enter an existing username and password to change password",
+            "Syntax: task-cli.py change_password [username] [password]",
+        )
+    
+    
 
 
 main()
