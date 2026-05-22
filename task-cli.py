@@ -204,28 +204,22 @@ def update_task(username, password, task_search, new_title):
                 )
 
 
-def list_task(username, password, list_type=""):
+def list_task(username, password, list_type):
     global ALL_TASKS
 
     current_user = user_login(username, password)
-    
-    found = False
-    if list_type in ["", "all"]:
+
+    if list_type in ["all"]:
         for task in ALL_TASKS:
             if str(task["user_id"]) == str(current_user["id"]):
-                found = True
                 print("-" * 50)
                 print(f"Task ID: {task['id']}")
                 print(f"Title: {task['title']}")
                 print(f"Status: {task['status']}")
                 print(f"Created at: {task['created_at']}")
                 print(f"Last updated: {task['updated_at']}")
-        if not found:
-            error(f"You have no tasks!")
-
-    if list_type in ["completed", "finished", "done"]:
+    elif list_type in ["completed", "finished", "done"]:
         view_tasks_print(current_user, "completed")
-        
     elif list_type in [
         "to-do",
         "incomplete",
@@ -323,10 +317,10 @@ def main():
 
     # view tasks:
     if str(sys.argv[3]).lower() == "list":
-        list_task(str(sys.argv[1]), str(sys.argv[2]), str("all"))
+        list_task(str(sys.argv[1]), str(sys.argv[2]), "all")
 
     if len(sys.argv) == 5 and str(sys.argv[3]).lower() == "list":
-        list_task(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[4]).lower())
+        list_task(str(sys.argv[1]), str(sys.argv[2]), sys.argv[4].lower())
 
 
 main()
