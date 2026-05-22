@@ -204,6 +204,13 @@ def update_task(username, password, task_search, new_title):
                 )
 
 
+def list_view(username, password, list_type = ""):
+    global ALL_TASKS
+    
+    current_user = user_login(username, password)
+    
+    if list_type not in ['done', 'todo', 'to-do', 'pending', 'in progress', 'in-progress', "", ]
+
 def main():
     if len(sys.argv) <= 2:
         error(
