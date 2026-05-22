@@ -57,9 +57,9 @@ def user_login(username, password):
             if user["password"] == password:
                 return user
             else:
-                error("Password Incorrect, try again!")
+                return None, error("Password Incorrect, try again!")
     else:
-        error("Username doesn't exist!")
+        return None, error("Username doesn't exist!")
 
 
 def new_user(username, password):
@@ -116,43 +116,90 @@ def add_task(username, password, task_title):
 
     current_user = user_login(username, password)
 
-    current_user_tasks = []
+    if current_user:
+        current_user_tasks = []
 
-    for task in ALL_TASKS:
-        if str(task["user_id"]) == str(current_user["id"]):
-            current_user_tasks.append(task)
+        for task in ALL_TASKS:
+            if str(task["user_id"]) == str(current_user["id"]):
+                current_user_tasks.append(task)
 
-    id = max((task["id"] for task in current_user_tasks), default=0) + 1
+        id = max((task["id"] for task in current_user_tasks), default=0) + 1
 
-    new_task = {
-        "id": int(id),
-        "user_id": int(current_user["id"]),
-        "title": task_title,
-        "status": "to-do",
-        "created_at": f"{datetime.now().replace(microsecond=0)}",
-        "updated_at": None,
-    }
+        new_task = {
+            "id": int(id),
+            "user_id": int(current_user["id"]),
+            "title": task_title,
+            "status": "to-do",
+            "created_at": f"{datetime.now().replace(microsecond=0)}",
+            "updated_at": None,
+        }
 
-    ALL_TASKS.append(new_task)
-    save_data(ALL_TASKS, TASKS_FILE)
-    error(f"Task added for user '{current_user['username']}'!")
+        ALL_TASKS.append(new_task)
+        save_data(ALL_TASKS, TASKS_FILE)
+        error(f"Task added for user '{current_user['username']}'!")
 
 
 def delete_task(username, password, task_id):
     global ALL_TASKS
 
     current_user = user_login(username, password)
+    if current_user:
+        for i, task in enumerate(ALL_TASKS):
+            if str(task["user_id"]) == str(current_user["id"]):
+                if str(task["id"]) == task_id:
+                    del ALL_TASKS[i]
+                    save_data(ALL_TASKS, TASKS_FILE)
+                    error("Task deleted successfully!")
+        else:
+            error("No task with this ID, try again!")
 
-    print(current_user)
 
-    for i, task in enumerate(ALL_TASKS):
-        if str(task["user_id"]) == str(current_user["id"]):
-            if str(task["id"]) == task_id:
-                del ALL_TASKS[i]
-                save_data(ALL_TASKS, TASKS_FILE)
-                error("Task deleted successfully!")
-    else:
-        error("No task with this ID, try again!")
+def update_task(username, password, task_search, new_title):
+    global ALL_TASKS
+
+    current_user = user_login(username, password)
+
+    now = str(datetime.now().replace(microsecond=0))
+
+    if current_user:
+        if task_search.isnumeric():
+            for task in ALL_TASKS:
+                if str(task["id"]) == str(task_search) and str(task["user_id"]) == str(
+                    current_user["id"]
+                ):
+                    old = task["title"]
+                    task["title"] = new_title
+                    task["updated_at"] = now
+                    save_data(ALL_TASKS, TASKS_FILE)
+                    error(
+                        f"Updating task for '{current_user['username']}' from '{old}' to '{new_title}'"
+                    )
+            else:
+                error("No task found with that id")
+        else:
+            counter = 0
+            for task in ALL_TASKS:
+                if task["title"].lower() == task_search.lower() and str(
+                    task["user_id"]
+                ) == str(current_user["id"]):
+                    counter += 1
+            
+            if counter == 1:
+                for task in ALL_TASKS:
+                    if task["title"].lower() == task_search.lower() and str(
+                        task["user_id"]
+                    ) == str(current_user["id"]):
+                        old = task["title"]
+                        task["title"] = new_title
+                        task["update_at"] = now
+                        save_data(ALL_TASKS, TASKS_FILE)
+                        error(
+                            f"Updating task for '{current_user['username']}' from '{old}' to '{new_title}'"
+                        )
+                else:
+                    error("No task found with that title")
+            else:
+                error("You have more than one task with the same title, please use task id instead!")
 
 
 def main():
@@ -197,9 +244,20 @@ def main():
         error(
             "Please enter in the following format:",
             "task-cli.py [username] [password] delete_task [task id]",
-        )  #      0           1          2            3         4
+        )
     if len(sys.argv) == 5 and str(sys.argv[3]).lower() == "delete_task":
         delete_task(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[4]))
+
+    # Update Task:
+    if len(sys.argv) < 6 and str(sys.argv[3]).lower() == "update_task":
+        error(
+            "Please enter in the following format:",
+            "task-cli.py [username] [password] update_task [task id / title] [new task title]",
+        )
+    if len(sys.argv) == 6 and str(sys.argv[3]).lower() == "update_task":
+        update_task(
+            str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[4]), str(sys.argv[5])
+        )
 
 
 main()
