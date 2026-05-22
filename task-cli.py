@@ -189,7 +189,7 @@ def main():
         )
 
     if len(sys.argv) == 5 and str(sys.argv[3]).lower() == "add_task":
-        add_task(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]))
+        add_task(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[4]))
 
     # Delete Task:
     if len(sys.argv) < 5 and str(sys.argv[3]).lower() == "delete_task":
