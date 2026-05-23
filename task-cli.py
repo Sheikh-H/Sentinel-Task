@@ -7,8 +7,6 @@ from datetime import datetime
 # Global Variables:
 TASKS_FILE = "tasks.json"
 USERS_FILE = "users.json"
-ALL_TASKS = load_data(TASKS_FILE)
-ALL_USERS = load_data(USERS_FILE)
 
 
 def save_data(data, filename):
@@ -37,6 +35,11 @@ def error(*messages):
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
+
+
+# Function calls placed here as it's not defining the functions
+ALL_TASKS = load_data(TASKS_FILE)
+ALL_USERS = load_data(USERS_FILE)
 
 
 def user_login(username, password):
@@ -169,7 +172,7 @@ def update_task(username, password, task_search, new_title):
                     task["updated_at"] = now
                     save_data(ALL_TASKS, TASKS_FILE)
                     error(
-                        f"Updating task for '{current_user['username']}' from '{old}' to '{new_title}'"
+                        f"Updated task for '{current_user['username']}' from '{old}' to '{new_title}'"
                     )
         else:
             counter = 0
@@ -196,6 +199,26 @@ def update_task(username, password, task_search, new_title):
                 )
 
 
+def view_tasks_print(user, category):
+    global ALL_TASKS
+    found = False
+    for task in ALL_TASKS:
+        if (
+            str(task["user_id"]) == str(user["id"])
+            and task["status"].lower() == category.lower()
+        ):
+            found = True
+            print("-" * 50)
+            print(f"Task ID: {task['id']}")
+            print(f"Title: {task['title']}")
+            print(f"Status: {task['status']}")
+            print(f"Created at: {task['created_at']}")
+            print(f"Last updated: {task['updated_at']}")
+
+    if not found:
+        error(f"You have no '{category}' tasks!")
+
+
 def list_task(username, password, list_type):
     global ALL_TASKS
 
@@ -211,7 +234,7 @@ def list_task(username, password, list_type):
                 print(f"Created at: {task['created_at']}")
                 print(f"Last updated: {task['updated_at']}")
     elif list_type in ["completed", "finished", "done"]:
-        view_tasks_print(current_user, "completed")
+        view_tasks_print(current_user, "done")
     elif list_type in [
         "to-do",
         "incomplete",
@@ -231,24 +254,60 @@ def list_task(username, password, list_type):
         )
 
 
-def view_tasks_print(user, category):
+def mark_as_complete(username, password, task_search):
     global ALL_TASKS
-    found = False
-    for task in ALL_TASKS:
-        if (
-            str(task["user_id"]) == str(user["id"])
-            and task["status"].lower() == category
-        ):
-            found = True
-            print("-" * 50)
-            print(f"Task ID: {task['id']}")
-            print(f"Title: {task['title']}")
-            print(f"Status: {task['status']}")
-            print(f"Created at: {task['created_at']}")
-            print(f"Last updated: {task['updated_at']}")
 
-    if not found:
-        error(f"You have no {category} tasks!")
+    now = str(datetime.now().replace(microsecond=0))
+
+    current_user = user_login(username, password)
+
+    if task_search.isnumeric():
+        for task in ALL_TASKS:
+            if (
+                str(task["user_id"]) == current_user["id"]
+                and str(task["id"]) == str(task_search)
+                and task["status"] != "COMPLETED"
+            ):
+
+                task["status"] = "COMPLETED"
+                task["updated_at"] = now
+                break
+    else:
+        count = 0
+        task_id = []
+        for task in ALL_TASKS:
+            if (
+                str(task["user_id"]) == current_user["id"]
+                and task["title"].lower() == task_search.lower()
+            ):
+                count += 1
+                task_id.append(task["id"])
+        if count > 1:
+            print(
+                "You have more than one task with the same title, please use task id insted!"
+            )
+            sleep(1)
+            print("List of tasks with same title:")
+            sleep(1)
+            for task in ALL_TASKS:
+                if task["id"] in task_id:
+                    print(f"Task ID: {task['id']}")
+                    print(f"Title: {task['title']}")
+                    print(f"Status: {task['status']}")
+                    print(f"Created at: {task['created_at']}")
+                    print(f"Last updated: {task['updated_at']}")
+        else:
+            for task in ALL_TASKS:
+                if (
+                    task["title"].lower() == task_search.lower()
+                    and str(task["user_id"]) == str(current_user["id"])
+                    and task["status"] != "COMPLETED"
+                ):
+                    task["status"] = "COMPLETED"
+                    task["updated_at"] = now
+                    break
+    save_data(ALL_TASKS, TASKS_FILE)
+    error(f"Task '{task['title']}' updated to complete!")
 
 
 def main():
@@ -265,7 +324,11 @@ def main():
             "NOTE: Where you could use more than one word for a criteria please enclose in speech marks ('')",
             "Type task-cli.py --help to see this menu again",
         )
-    elif len(sys.argv) == 4 and sys.argv[1].lower() == "new_user":
+    elif (
+        len(sys.argv) == 4
+        and sys.argv[1].lower() == "new_user"
+        or sys.argv[1].lower() == "add_user"
+    ):
         new_user(sys.argv[2], sys.argv[3])
     elif len(sys.argv) == 5 and sys.argv[1].lower() == "change_password":
         change_password(sys.argv[2], sys.argv[3], sys.argv[4])
