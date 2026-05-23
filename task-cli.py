@@ -4,6 +4,14 @@ import os
 from time import sleep
 from datetime import datetime
 
+# Global Variables:
+TASKS_FILE = "tasks.json"
+USERS_FILE = "users.json"
+
+# Global functions:
+ALL_TASKS = load_data(TASKS_FILE)
+ALL_USERS = load_data(USERS_FILE)
+
 
 def save_data(data, filename):
     with open(filename, "w") as f:
@@ -31,15 +39,6 @@ def error(*messages):
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
-
-
-# Global Variables:
-TASKS_FILE = "tasks.json"
-USERS_FILE = "users.json"
-
-# Global functions:
-ALL_TASKS = load_data(TASKS_FILE)
-ALL_USERS = load_data(USERS_FILE)
 
 
 def user_login(username, password):
@@ -281,9 +280,10 @@ def main():
     elif len(sys.argv) == 4 and sys.argv[3].lower() == "view":
         list_task(sys.argv[1], sys.argv[2], "all")
     elif len(sys.argv) == 5 and sys.argv[3].lower() == "view":
-        list_task(sys.argv[1], sys.argv[2], sys.argv[4])
+        list_task(sys.argv[1], sys.argv[2], sys.argv[4].lower())
     else:
         error("Invalid command!", "Type task-cli.py --help for manual")
 
 
-main()
+if __name__ == "__main__":
+    main()
