@@ -56,8 +56,10 @@ def user_login(username, password):
 
     for user in ALL_USERS:
         if user["username"] == username:
-            attempt = hashlib.pbkdf2_hmac("sha256", password.encode(), user['salt'].encode(), 100000).hex()
-            if attempt == user['password']:
+            attempt = hashlib.pbkdf2_hmac(
+                "sha256", password.encode(), user["salt"].encode(), 100000
+            ).hex()
+            if attempt == user["password"]:
                 return user
             else:
                 error("Password Incorrect, Try again!")
@@ -71,7 +73,6 @@ def new_user(username, password):
     for user in ALL_USERS:
         if user["username"] == username:
             error("Username Already Exists, try again!")
-            break
 
     user_id = max((user["id"] for user in ALL_USERS), default=0) + 1
 
@@ -88,7 +89,7 @@ def new_user(username, password):
     hashed_password = hashlib.pbkdf2_hmac(
         "sha256", password.encode(), salt.encode(), 100000
     ).hex()
-    
+
     add_user = {
         "id": int(user_id),
         "username": username,
@@ -103,6 +104,7 @@ def new_user(username, password):
     save_data(ALL_USERS, USERS_FILE)
 
     error("New User Added!")
+
 
 def change_password(username, old_password, new_password):
     global ALL_USERS
