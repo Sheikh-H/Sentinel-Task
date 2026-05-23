@@ -91,7 +91,9 @@ def new_user(username, password):
     hashed_password = hashlib.pbkdf2_hmac(
         "sha256", password.encode(), salt.encode(), 100000
     ).hex()
-    
+
+    print(hashed_password)
+
     add_user = {
         "id": int(user_id),
         "username": username,
@@ -106,6 +108,7 @@ def new_user(username, password):
     save_data(ALL_USERS, USERS_FILE)
 
     error("New User Added!")
+
 
 def change_password(username, old_password, new_password):
     global ALL_USERS

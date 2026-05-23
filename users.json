@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": 1,
+    "username": "Hussain",
+    "password": "934f92c2b21008558d21a04c74de62cffc1e78566a104aaeac6b126d935bb091",
+    "created_at": "2026-05-23 15:06:36",
+    "salt": "c972a000725c78a82b69734fd9ec6056",
+    "last_updated": null
+  }
+]
