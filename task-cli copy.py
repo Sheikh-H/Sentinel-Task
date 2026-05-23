@@ -201,18 +201,22 @@ def update_task(username, password, task_search, new_title):
 
 def view_tasks_print(user, category):
     global ALL_TASKS
+    found = False
     for task in ALL_TASKS:
         if (
             str(task["user_id"]) == str(user["id"])
             and task["status"].lower() == category.lower()
         ):
+            found = True
             print("-" * 50)
             print(f"Task ID: {task['id']}")
             print(f"Title: {task['title']}")
             print(f"Status: {task['status']}")
             print(f"Created at: {task['created_at']}")
             print(f"Last updated: {task['updated_at']}")
-    print("-" * 50)
+
+    if not found:
+        error(f"You have no '{category}' tasks!")
 
 
 def list_task(username, password, list_type):
@@ -221,35 +225,32 @@ def list_task(username, password, list_type):
     current_user = user_login(username, password)
 
     if list_type == "all":
-        view_tasks_print(current_user, "all")
-    elif list_type in ["done", "completed", "finished", "complete"]:
-        view_tasks_print(current_user, "completed")
+        for task in ALL_TASKS:
+            if str(task["user_id"]) == str(current_user["id"]):
+                print("-" * 50)
+                print(f"Task ID: {task['id']}")
+                print(f"Title: {task['title']}")
+                print(f"Status: {task['status']}")
+                print(f"Created at: {task['created_at']}")
+                print(f"Last updated: {task['updated_at']}")
+    elif list_type in ["completed", "finished", "done"]:
+        view_tasks_print(current_user, "done")
     elif list_type in [
-        "new",
-        "new tasks",
-        "just added",
-        "recent",
-        "recently added",
         "to-do",
+        "incomplete",
+        "not done",
+        "unfinished",
         "todo",
+        "pending",
     ]:
         view_tasks_print(current_user, "to-do")
-    elif list_type in [
-        "doing",
-        "current",
-        "currently active",
-        "active",
-        "active tasks",
-        "current tasks",
-    ]:
-        view_tasks_print(current_user, "in-progress")
+    elif list_type in ["just started", "new", "recently added", "new tasks"]:
+        view_tasks_print(current_user, "recently added")
     else:
         error(
-            "To view tasks you can enter a number of phrases that correlate to the task type you would like to view. Here is a list of the ones you can use:",
-            "For tasks that are completed: ['done', 'complete', 'completed', 'finished']",
-            "For tasks that are in progress: ['doing', 'current', 'currently active', 'active', 'active tasks', 'current tasks']",
-            "For tasks that recently added or awaiting to be started ['new', 'new tasks', 'just added', 'recent', 'recently added']",
-            "To view all tasks, just exclude a parameter for the type of tasks you want to view or type 'all'",
+            "Please enter from the following values:",
+            "['completed', 'finished', 'done', 'to-do', 'incomplete', 'not done', 'unfinished','todo', 'pending','just started', 'new', 'recently added', 'new tasks']",
+            "Or leave blank to have all tasks displayed",
         )
 
 
@@ -263,7 +264,7 @@ def mark_as_complete(username, password, task_search):
     if task_search.isnumeric():
         for task in ALL_TASKS:
             if (
-                str(task["user_id"]) == str(current_user["id"])
+                str(task["user_id"]) == current_user["id"]
                 and str(task["id"]) == str(task_search)
                 and task["status"].lower() != "COMPLETED".lower()
             ):
@@ -276,7 +277,7 @@ def mark_as_complete(username, password, task_search):
         task_id = []
         for task in ALL_TASKS:
             if (
-                str(task["user_id"]) == str(current_user["id"])
+                str(task["user_id"]) == current_user["id"]
                 and task["title"].lower() == task_search.lower()
             ):
                 count += 1
@@ -319,7 +320,7 @@ def mark_in_progress(username, password, task_search):
     if task_search.isnumeric():
         for task in ALL_TASKS:
             if (
-                str(task["user_id"]) == str(current_user["id"])
+                str(task["user_id"]) == current_user["id"]
                 and str(task["id"]) == str(task_search)
                 and task["status"].lower() != "IN PROGRESS".lower()
             ):
@@ -332,7 +333,7 @@ def mark_in_progress(username, password, task_search):
         task_id = []
         for task in ALL_TASKS:
             if (
-                str(task["user_id"]) == str(current_user["id"])
+                str(task["user_id"]) == current_user["id"]
                 and task["title"].lower() == task_search.lower()
             ):
                 count += 1
@@ -398,7 +399,7 @@ def main():
     elif len(sys.argv) == 5 and sys.argv[3].lower() == "delete-task":
         delete_task(sys.argv[1], sys.argv[2], sys.argv[4])
     elif len(sys.argv) == 4 and sys.argv[3].lower() == "view":
-        list_task(sys.argv[1], sys.argv[2], "all".lower())
+        list_task(sys.argv[1], sys.argv[2], "all")
     elif len(sys.argv) == 5 and sys.argv[3].lower() == "view":
         list_task(sys.argv[1], sys.argv[2], sys.argv[4].lower())
     elif len(sys.argv) == 5 and sys.argv[3].lower() == "mark-complete":
