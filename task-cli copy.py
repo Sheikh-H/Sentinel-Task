@@ -24,11 +24,9 @@ def load_data(filename):
         data = json.load(f)
         return data
 
-
 # Function calls placed here as it's not defining the functions
 ALL_TASKS = load_data(TASKS_FILE)
 ALL_USERS = load_data(USERS_FILE)
-
 
 def error(*messages):
     clear_screen()
@@ -53,12 +51,6 @@ def user_login(username, password):
             "Please create one with the following syntax:",
             "task-cli.py new_user [username] [password].",
         )
-
-    if username.strip() == "":
-        error("Please enter username")
-
-    if password.strip() == "":
-        error("Please enter your password")
 
     for user in ALL_USERS:
         if user["username"] == username:
@@ -121,41 +113,17 @@ def change_password(username, old_password, new_password):
             "Please create a new user first with 'new_user' [username] [password]",
         )
 
-    current_user = user_login(username, old_password)
-
-    if new_password.strip() == "":
-        error("Please enter the new password")
-
-    new_salt = secrets.token_hex(16)
-
-    new_password_hashed = hashlib.pbkdf2_hmac(
-        "sha256", new_password.encode(), new_salt.encode(), 100000
-    ).hex()
-
     now = str(datetime.now().replace(microsecond=0))
 
-    for user in ALL_USERS:
-        if str(user["id"]) == str(current_user["id"]):
-            verify_existing_password = (
-                hashlib.pbkdf2_hmac(
-                    "sha256",
-                    old_password.encode(),
-                    current_user["salt"].encode(),
-                    100000,
-                ).hex()
-                == hashlib.pbkdf2_hmac(
-                    "sha256",
-                    current_user["password"].encode(),
-                    current_user["salt"].encode(),
-                    100000,
-                ).hex()
-            )
-            if verify_existing_password:
-                current_user["password"] = new_password_hashed
-                current_user["salt"] = new_salt
-                error("Password hass been updated!")
-            else:
-                error("Old password entered is incorrect!")
+    current_user = user_login(username, old_password)
+    
+    if current_user:
+        for user in ALL_USERS:
+            if str(user["id"]) == str(current_user["id"]):
+                user["password"] = new_password
+                user["last_updated"] = now
+                save_data(ALL_USERS, USERS_FILE)
+                error(f"Password updated for '{user['username']}'")
 
 
 def add_task(username, password, task_title):
