@@ -3,6 +3,7 @@ import json
 import os
 from time import sleep
 from datetime import datetime
+import hashlib
 
 # Global Variables:
 TASKS_FILE = "tasks.json"
@@ -74,12 +75,16 @@ def new_user(username, password):
 
     now = str(datetime.now().replace(microsecond=0))
 
+    if username.strip() == "" or password.strip() == "":
+        error("Please enter a valid username and password to register an account!")
+
     add_user = {
         "id": int(user_id),
         "username": username,
         "password": password,
         "created_at": now,
         "last_updated": None,
+        "salt": None,
     }
 
     ALL_USERS.append(add_user)
