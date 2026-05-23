@@ -19,30 +19,17 @@ Unlike basic single-user scripts, SentinelTask implements robust multi-user isol
 
 ---
 
-<h2>⚙️ Core Features</h2>
-
-<ul>
-  <li>🔐 <b>Multi-User Architecture:</b> Full data isolation between multiple registered users.</li>
-  <li>🛡️ <b>Cryptographic Security:</b> Passwords are securely hashed with a random salt using <code>PBKDF2-HMAC-SHA256</code> to prevent data exposure.</li>
-  <li>⚡ <b>Pure Command-Line Execution:</b> Zero slow interactive prompts; operations are executed instantly using terminal arguments (<code>sys.argv</code>).</li>
-  <li>🔄 <b>Flexible Filtering:</b> View tasks by distinct states (<code>To-Do</code>, <code>In-Progress</code>, <code>Completed</code>) via dynamic alias matching.</li>
-  <li>🆔 <b>Auto-Incrementing Scopes:</b> Task IDs are user-scoped, auto-incrementing dynamically based on each user's unique collection.</li>
-  <li>💾 <b>Persistent Single-File JSON Engine:</b> Saves user accounts (<code>users.json</code>) and tasks (<code>tasks.json</code>) securely with automatic initialization.</li>
-</ul>
-
----
-
 <h2>🔄 Evolution: Differences from the Old Version</h2>
 
 <p>
-SentinelTask is a complete architectural rewrite of the previous single-user <i>Task Manager (CLI Edition)</i>. Here is a breakdown of the structural upgrades:
+SentinelTask is a complete architectural rewrite of the previous single-user <b><a href="https://github.com/Sheikh-H/TaskManager" target="_blank">Task Manager (CLI Edition)</a></b>. Here is a breakdown of the structural upgrades:
 </p>
 
 <table width="100%">
   <thead>
     <tr style="background-color: #376e00; color: white;">
       <th style="padding: 10px; text-align: left;">Feature</th>
-      <th style="padding: 10px; text-align: left;">Old Version (Task Manager)</th>
+      <th style="padding: 10px; text-align: left;">Old Version (<a href="https://github.com/Sheikh-H/TaskManager" style="color: white; text-decoration: underline;">Task Manager</a>)</th>
       <th style="padding: 10px; text-align: left;">New Version (SentinelTask)</th>
     </tr>
   </thead>
@@ -95,7 +82,7 @@ SentinelTask/
 <ol>
   <li>Ensure you have <b>Python 3.8 or above</b> installed on your operating system.</li>
   <li>Clone or download this repository locally:
-    <pre>git clone https://github.com/Sheikh-H/TaskManager.git</pre>
+    <pre>git clone https://github.com/Sheikh-H/Sentinel-Task.git</pre>
   </li>
   <li>Navigate directly into the project directory:
     <pre>cd SentinelTask</pre>
@@ -275,16 +262,16 @@ SOFTWARE.
 ## Footnote
 
 <div align="center" style="border: 1px solid green; padding: 10px; border-radius: 5px;">
-	<p>🗣️ Feel free to follow, connect, and chat!</p>
-	<a class="header-badge" target="_blank" href="https://github.com/Sheikh-H"><img src="https://img.shields.io/badge/GitHub-376e00?style=flat&logo=github&logoColor=white" alt="GitHub">
-	</a><a class="header-badge" target="_blank" href="https://www.linkedin.com/in/sheikh-hussain/"><img src="https://img.shields.io/badge/LinkedIn-376e00?style=flat&logo=LinkedIn&logoColor=white" alt="LinkedIn">
-	</a><a class="header-badge" target="_blank" href="mailto:sheikh.hussain1155@gmail.com"><img src="https://img.shields.io/badge/Gmail-376e00?style=flat&logo=gmail&logoColor=white" alt="Gmail">
-	</a><a class="header-badge" target="_blank" href="https://sheikh-h.github.io/"><img src="https://img.shields.io/badge/Portfolio-376e00?style=flat&logo=github&logoColor=white" alt="Portfolio">
-	</a>
+  <p>🗣️ Feel free to follow, connect, and chat!</p>
+  <a class="header-badge" target="_blank" href="https://github.com/Sheikh-H"><img src="https://img.shields.io/badge/GitHub-376e00?style=flat&logo=github&logoColor=white" alt="GitHub">
+  </a><a class="header-badge" target="_blank" href="https://www.linkedin.com/in/sheikh-hussain/"><img src="https://img.shields.io/badge/LinkedIn-376e00?style=flat&logo=LinkedIn&logoColor=white" alt="LinkedIn">
+  </a><a class="header-badge" target="_blank" href="mailto:sheikh.hussain1155@gmail.com"><img src="https://img.shields.io/badge/Gmail-376e00?style=flat&logo=gmail&logoColor=white" alt="Gmail">
+  </a><a class="header-badge" target="_blank" href="https://sheikh-h.github.io/"><img src="https://img.shields.io/badge/Portfolio-376e00?style=flat&logo=github&logoColor=white" alt="Portfolio">
+  </a>
 </div>
 
 <div align="center">
-	<a href="https://www.linkedin.com/in/sheikh-hussain/" target="_blank">By Sheikh Hussain 💚</a>  
+  <a href="https://www.linkedin.com/in/sheikh-hussain/" target="_blank">By Sheikh Hussain 💚</a>  
 </div>
 
 ---
