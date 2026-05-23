@@ -255,33 +255,32 @@ def view_tasks_print(user, category):
 
 
 def main():
-    # Empty function call:
     if len(sys.argv) <= 2 or "--help" in sys.argv:
         error(
             "To use the Task Manager CLI, please enter with the following syntax:",
             "To add new user: task-cli.py new_user [new username] [new password]",
-            "To change password: task-cli.py [username] [old password] [new password]",
+            "To change password: task-cli.py change_password [username] [old password] [new password]",
             "To add a task: task-cli.py [username] [password] add_task [task title]",
             "To update a task: task-cli.py [username] [password] update_task [task id number or 'task title']",
             "To delete a task: task-cli.py [username] [password] delete_task [task id number or 'task title']",
-            "To view all tasks: task-cli.py [username] [password] view"
-            "To view specific type of tasks: task-cli.py [username] [password] view [type of task i.e. 'to be completed']"
+            "To view all tasks: task-cli.py [username] [password] view",
+            "To view specific type of tasks: task-cli.py [username] [password] view [type of task i.e. 'to be completed']",
             "NOTE: Where you could use more than one word for a criteria please enclose in speech marks ('')",
             "Type task-cli.py --help to see this menu again",
         )
-    elif sys.argv[1].lower() == "new_user":
+    elif len(sys.argv) == 4 and sys.argv[1].lower() == "new_user":
         new_user(sys.argv[2], sys.argv[3])
-    elif sys.argv[1].lower() == "change_password":
+    elif len(sys.argv) == 5 and sys.argv[1].lower() == "change_password":
         change_password(sys.argv[2], sys.argv[3], sys.argv[4])
-    elif sys.argv[3].lower() == "add_task":
+    elif len(sys.argv) == 5 and sys.argv[3].lower() == "add_task":
         add_task(sys.argv[1], sys.argv[2], sys.argv[4])
-    elif sys.argv[3].lower() == "update_task":
+    elif len(sys.argv) == 6 and sys.argv[3].lower() == "update_task":
         update_task(sys.argv[1], sys.argv[2], sys.argv[4], sys.argv[5])
-    elif sys.argv[3].lower() == "delete_task":
+    elif len(sys.argv) == 5 and sys.argv[3].lower() == "delete_task":
         delete_task(sys.argv[1], sys.argv[2], sys.argv[4])
-    elif "view" == sys.argv[3].lower() and len(sys.argv) == 4:
+    elif len(sys.argv) == 4 and sys.argv[3].lower() == "view":
         list_task(sys.argv[1], sys.argv[2], "all")
-    elif "view" == sys.argv[3].lower() and len(sys.argv) == 5:
+    elif len(sys.argv) == 5 and sys.argv[3].lower() == "view":
         list_task(sys.argv[1], sys.argv[2], sys.argv[4])
     else:
         error("Invalid command!", "Type task-cli.py --help for manual")
