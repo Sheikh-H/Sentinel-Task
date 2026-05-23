@@ -266,7 +266,7 @@ def mark_as_complete(username, password, task_search):
             if (
                 str(task["user_id"]) == current_user["id"]
                 and str(task["id"]) == str(task_search)
-                and task["status"] != "COMPLETED"
+                and task["status"].lower() != "COMPLETED".lower()
             ):
 
                 task["status"] = "COMPLETED"
@@ -301,7 +301,7 @@ def mark_as_complete(username, password, task_search):
                 if (
                     task["title"].lower() == task_search.lower()
                     and str(task["user_id"]) == str(current_user["id"])
-                    and task["status"] != "COMPLETED"
+                    and task["status"].lower() != "COMPLETED".lower()
                 ):
                     task["status"] = "COMPLETED"
                     task["updated_at"] = now
@@ -310,15 +310,75 @@ def mark_as_complete(username, password, task_search):
     error(f"Task '{task['title']}' updated to complete!")
 
 
+def mark_in_progress(username, password, task_search):
+    global ALL_TASKS
+
+    now = str(datetime.now().replace(microsecond=0))
+
+    current_user = user_login(username, password)
+
+    if task_search.isnumeric():
+        for task in ALL_TASKS:
+            if (
+                str(task["user_id"]) == current_user["id"]
+                and str(task["id"]) == str(task_search)
+                and task["status"].lower() != "IN PROGRESS".lower()
+            ):
+
+                task["status"] = "IN PROGRESS"
+                task["updated_at"] = now
+                break
+    else:
+        count = 0
+        task_id = []
+        for task in ALL_TASKS:
+            if (
+                str(task["user_id"]) == current_user["id"]
+                and task["title"].lower() == task_search.lower()
+            ):
+                count += 1
+                task_id.append(task["id"])
+        if count > 1:
+            print(
+                "You have more than one task with the same title, please use task id insted!"
+            )
+            sleep(1)
+            print("List of tasks with same title:")
+            sleep(1)
+            for task in ALL_TASKS:
+                if task["id"] in task_id:
+                    print(f"Task ID: {task['id']}")
+                    print(f"Title: {task['title']}")
+                    print(f"Status: {task['status']}")
+                    print(f"Created at: {task['created_at']}")
+                    print(f"Last updated: {task['updated_at']}")
+        else:
+            for task in ALL_TASKS:
+                if (
+                    task["title"].lower() == task_search.lower()
+                    and str(task["user_id"]) == str(current_user["id"])
+                    and task["status"].lower() != "IN PROGRESS".lower()
+                ):
+                    task["status"] = "IN PROGRESS"
+                    task["updated_at"] = now
+                    break
+                else:
+                    error("Task already marked as 'IN PROGRESS'")
+    save_data(ALL_TASKS, TASKS_FILE)
+    error(f"Task '{task['title']}' updated to complete!")
+
+
 def main():
     if len(sys.argv) <= 2 or "--help" in sys.argv:
         error(
             "To use the Task Manager CLI, please enter with the following syntax:",
-            "To add new user: task-cli.py new_user [new username] [new password]",
-            "To change password: task-cli.py change_password [username] [old password] [new password]",
-            "To add a task: task-cli.py [username] [password] add_task [task title]",
-            "To update a task: task-cli.py [username] [password] update_task [task id number or 'task title']",
-            "To delete a task: task-cli.py [username] [password] delete_task [task id number or 'task title']",
+            "To add new user: task-cli.py new-user [new username] [new password]",
+            "To change password: task-cli.py change-password [username] [old password] [new password]",
+            "To add a task: task-cli.py [username] [password] add-task [task title]",
+            "To update a task: task-cli.py [username] [password] update-task [task id number or 'task title']",
+            "To delete a task: task-cli.py [username] [password] delete-task [task id number or 'task title']",
+            "To marks a task as complete: task-cli.py [username] [password] mark-complete [task id number or 'task title']",
+            "To marks a task as complete: task-cli.py [username] [password] mark-in-progress [task id number or 'task title']",
             "To view all tasks: task-cli.py [username] [password] view",
             "To view specific type of tasks: task-cli.py [username] [password] view [type of task i.e. 'to be completed']",
             "NOTE: Where you could use more than one word for a criteria please enclose in speech marks ('')",
@@ -326,22 +386,27 @@ def main():
         )
     elif (
         len(sys.argv) == 4
-        and sys.argv[1].lower() == "new_user"
-        or sys.argv[1].lower() == "add_user"
+        and sys.argv[1].lower() == "new-user"
+        or sys.argv[1].lower() == "add-user"
     ):
         new_user(sys.argv[2], sys.argv[3])
-    elif len(sys.argv) == 5 and sys.argv[1].lower() == "change_password":
+    elif len(sys.argv) == 5 and sys.argv[1].lower() == "change-password":
         change_password(sys.argv[2], sys.argv[3], sys.argv[4])
-    elif len(sys.argv) == 5 and sys.argv[3].lower() == "add_task":
+    elif len(sys.argv) == 5 and sys.argv[3].lower() == "add-task":
         add_task(sys.argv[1], sys.argv[2], sys.argv[4])
-    elif len(sys.argv) == 6 and sys.argv[3].lower() == "update_task":
+    elif len(sys.argv) == 6 and sys.argv[3].lower() == "update-task":
         update_task(sys.argv[1], sys.argv[2], sys.argv[4], sys.argv[5])
-    elif len(sys.argv) == 5 and sys.argv[3].lower() == "delete_task":
+    elif len(sys.argv) == 5 and sys.argv[3].lower() == "delete-task":
         delete_task(sys.argv[1], sys.argv[2], sys.argv[4])
     elif len(sys.argv) == 4 and sys.argv[3].lower() == "view":
         list_task(sys.argv[1], sys.argv[2], "all")
     elif len(sys.argv) == 5 and sys.argv[3].lower() == "view":
         list_task(sys.argv[1], sys.argv[2], sys.argv[4].lower())
+    elif len(sys.argv) == 5 and sys.argv[3].lower() == "mark-complete":
+        mark_as_complete(sys.argv[1], sys.argv[2], sys.argv[4].lower())
+    elif len(sys.argv) == 5 and sys.argv[3].lower() == "mark-in-progress":
+        mark_as_complete(sys.argv[1], sys.argv[2], sys.argv[4].lower())
+
     else:
         error("Invalid command!", "Type task-cli.py --help for manual")
 
