@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "username": "Hussain",
+    "password": "7b405c1c70a4cbdf6199be1bb28055286ae8880f296c4cb661435dae1270eda3",
+    "created_at": "2026-05-23 16:09:57",
+    "salt": "0c2b6742f42e7cee0f11d4bb2be1a2e2",
+    "last_updated": null,
+    "updated_at": "2026-05-23 16:10:26"
+  }
+]

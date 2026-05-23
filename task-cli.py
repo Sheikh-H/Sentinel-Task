@@ -136,26 +136,11 @@ def change_password(username, old_password, new_password):
 
     for user in ALL_USERS:
         if str(user["id"]) == str(current_user["id"]):
-            verify_existing_password = (
-                hashlib.pbkdf2_hmac(
-                    "sha256",
-                    old_password.encode(),
-                    current_user["salt"].encode(),
-                    100000,
-                ).hex()
-                == hashlib.pbkdf2_hmac(
-                    "sha256",
-                    current_user["password"].encode(),
-                    current_user["salt"].encode(),
-                    100000,
-                ).hex()
-            )
-            if verify_existing_password:
-                current_user["password"] = new_password_hashed
-                current_user["salt"] = new_salt
-                error("Password hass been updated!")
-            else:
-                error("Old password entered is incorrect!")
+            user["password"] = new_password_hashed
+            user["salt"] = new_salt
+            user["updated_at"] = now
+            save_data(ALL_USERS, USERS_FILE)
+            error("Password hass been updated!")
 
 
 def add_task(username, password, task_title):
