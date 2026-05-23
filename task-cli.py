@@ -56,16 +56,13 @@ def user_login(username, password):
 
     for user in ALL_USERS:
         if user["username"] == username:
-            if hashlib.pbkdf2_hmac(
-                "sha256", user["password"].encode(), user["salt"].encode(), 100000
-            ).hex() == hashlib.pbkdf2_hmac(
-                "sha256", password.encode(), user["salt"].encode(), 100000
-            ).hex():
+            attempt = hashlib.pbkdf2_hmac("sha256", password.encode(), user['salt'].encode(), 100000).hex()
+            if attempt == user['password']:
                 return user
             else:
                 error("Password Incorrect, Try again!")
-        else:
-            error("Username doesn't exist!")
+    else:
+        error("Username doesn't exist!")
 
 
 def new_user(username, password):
