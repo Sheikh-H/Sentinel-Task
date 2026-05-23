@@ -17,6 +17,8 @@
 Unlike basic single-user scripts, SentinelTask implements robust multi-user isolation by utilising secure cryptographic hashing algorithms. Each user's data is isolated, and tasks are strictly mapped to their unique user accounts. No interactive menus are used; instead, it relies entirely on direct, fast command-line arguments passed via the terminal for slick automation and scriptability.
 </p>
 
+
+
 ---
 
 <h2>🔄 Evolution: Differences from the Old Version</h2>
