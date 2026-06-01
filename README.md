@@ -1,4 +1,4 @@
-# 🛡️ SentinelTask: Multi-User Cryptographic CLI Task Manager
+# 🛡️ SentinelTask: Multi-User CLI Task Manager
 
 <p align="center">
   <b>A secure, multi-user command-line task management system engineered in Python.</b><br>
@@ -57,7 +57,7 @@ SentinelTask is a complete architectural rewrite of the previous single-user <b>
     <tr>
       <td style="padding: 8px; border-bottom: 1px solid #ddd;"><b>Task Identifiers</b></td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd;">Global application ID counters across the entire file.</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd;"><b>User-scoped IDs</b> (User A and User B can both have a Task ID #1).</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd;"><b>User-scoped IDs</b> (`User A` and `User B` can both have a `Task ID #1`).</td>
     </tr>
   </tbody>
 </table>
@@ -174,9 +174,9 @@ This section details how the script processes data and explains exactly what eac
 <h3>Core Task Processing</h3>
 <ul>
   <li><code>add_task(username, password, task_title)</code>: Validates credentials via <code>user_login()</code>, checks for duplicate naming conflicts across active records, calculates a user-scoped incrementing identifier index, and maps a complete task entity containing creation timestamps.</li>
-  <li><code>update_task(username, password, task_search, new_title)</code>: Evaluates if <code>task_search</code> is a numerical entry or an explicit string pattern. If string matching yields ambiguous multiple results, the utility returns an intuitive prompt telling the user to use the unique numerical task ID context.</li>
+  <li><code>update_task(username, password, task_search, new_title)</code>: Evaluates if <code>task_search</code> is a numerical entry or an explicit string pattern. If string matching yields ambiguous multiple results, the utility returns an intuitive prompt telling the user to use the unique numerical task ID instead</li>
   <li><code>delete_task(username, password, task_id)</code>: Iterates sequentially over global storage scopes, maps entries containing matching ownership attributes, and removes indices targeting matching records.</li>
-  <li><code>list_task(username, password, list_type)</code>: Acts as an entry dispatcher. It processes multiple human-readable string inputs into standardized categories before querying output formatting streams.</li>
+  <li><code>list_task(username, password, list_type)</code>: Acts as an entry dispatcher. It processes multiple human-readable string inputs into standardised categories before querying output formatting streams.</li>
   <li><code>view_tasks_print(user, category)</code>: Evaluates parameters to layout information fields explicitly framed inside systematic ASCII table layouts, tracing parameters like creation dates and precise adjustment timestamps.</li>
 </ul>
 
